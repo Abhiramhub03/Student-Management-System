@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spring Boot Project – Students & Courses Management</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Mono:wght@400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 0;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover .badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 30px;
+    padding: 6px 22px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    color: #e0c9ff;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .cover h2 {
+    font-size: 18px;
+    font-weight: 400;
+    color: #a8b4d8;
+    margin-bottom: 48px;
+  }
+  .cover .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #2563eb);
+    border-radius: 2px;
+    margin: 0 auto 48px;
+  }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 560px;
+    width: 100%;
+    text-align: left;
+  }
+  .cover-meta-item {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .cover-meta-item .label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #a8b4d8;
+    margin-bottom: 4px;
+  }
+  .cover-meta-item .value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    word-break: break-all;
+  }
+  .cover .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  .tech-pill {
+    background: rgba(124,58,237,0.3);
+    border: 1px solid rgba(124,58,237,0.5);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 11px;
+    color: #d4c0ff;
+    font-weight: 600;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 50px;
+  }
+
+  /* ── TOC ── */
+  .toc-page {
+    page-break-after: always;
+    padding: 60px 50px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .toc-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    border-bottom: 3px solid #7c3aed;
+    padding-bottom: 12px;
+    margin-bottom: 32px;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .toc-item .toc-num {
+    font-weight: 700;
+    color: #7c3aed;
+    min-width: 30px;
+  }
+  .toc-item .toc-text { flex: 1; padding: 0 12px; color: #1a1a2e; }
+  .toc-item .toc-page-num { color: #94a3b8; font-size: 12px; font-weight: 600; }
+  .toc-sub {
+    padding-left: 30px;
+    font-size: 12.5px;
+    color: #475569;
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section {
+    page-break-before: always;
+    padding-top: 20px;
+  }
+  .section:first-child { page-break-before: avoid; }
+
+  h1.sec-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a2e;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #7c3aed;
+    margin-bottom: 24px;
+  }
+  h2.sub-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f3460;
+    margin: 28px 0 12px;
+    padding-left: 12px;
+    border-left: 4px solid #7c3aed;
+  }
+  h3.sub-sub-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #3730a3;
+    margin: 20px 0 8px;
+  }
+
+  p { margin-bottom: 12px; color: #334155; }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 20px 22px;
+    font-family: 'Fira Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 16px 0;
+    border: 1px solid #1e293b;
+  }
+  code {
+    font-family: 'Fira Mono', monospace;
+    background: #f1f5f9;
+    color: #7c3aed;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
+
+  /* ── KEYWORDS / ANNOTATIONS ── */
+  .kw  { color: #c792ea; }   /* keywords */
+  .ann { color: #ffcb6b; }   /* annotations */
+  .str { color: #c3e88d; }   /* strings */
+  .cmt { color: #546e7a; font-style: italic; }  /* comments */
+  .typ { color: #82aaff; }   /* types */
+  .fn  { color: #89ddff; }   /* function names */
+  .num { color: #f78c6c; }   /* numbers */
+  .pkg { color: #80cbc4; }   /* packages */
+
+  /* ── ER DIAGRAM / TABLES ── */
+  .er-container {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .er-table {
+    display: inline-block;
+    border: 2px solid #7c3aed;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 30px;
+    min-width: 200px;
+    vertical-align: top;
+    text-align: left;
+  }
+  .er-table-header {
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 16px;
+    text-align: center;
+  }
+  .er-table-row {
+    padding: 7px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .er-table-row:last-child { border-bottom: none; }
+  .er-table-row .pk { color: #f59e0b; font-weight: 700; font-size: 10px; }
+  .er-table-row .fk { color: #3b82f6; font-weight: 700; font-size: 10px; }
+  .er-rel {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    margin: 0 10px;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .er-rel .rel-line {
+    width: 80px;
+    height: 2px;
+    background: #94a3b8;
+    margin: 8px 0;
+  }
+  .er-rel .rel-label {
+    background: #e0e7ff;
+    color: #3730a3;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #1e40af;
+  }
+  .warn-box {
+    background: #fefce8;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #92400e;
+  }
+  .success-box {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #166534;
+  }
+
+  /* ── DATA TABLE ── */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 12.5px;
+  }
+  table.data-table th {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  table.data-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+  }
+  table.data-table tr:nth-child(even) td { background: #f8fafc; }
+  table.data-table tr:hover td { background: #f0f4ff; }
+
+  /* ── SCREENSHOT PLACEHOLDER ── */
+  .screenshot {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 16px 0;
+    color: #64748b;
+    font-size: 13px;
+  }
+  .screenshot .icon { font-size: 36px; margin-bottom: 10px; }
+  .screenshot strong { display: block; font-size: 14px; color: #374151; margin-bottom: 6px; }
+
+  /* ── LAYER CARD ── */
+  .layer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .layer-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .layer-card-header {
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+  }
+  .layer-card-body { padding: 14px 16px; font-size: 12.5px; color: #334155; }
+
+  .bg-purple { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+  .bg-blue   { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+  .bg-green  { background: linear-gradient(135deg, #059669, #047857); }
+  .bg-orange { background: linear-gradient(135deg, #d97706, #b45309); }
+
+  /* ── CHALLENGE LIST ── */
+  .challenge-item {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid #7c3aed;
+  }
+  .challenge-item h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+  .challenge-item .solution {
+    font-size: 12.5px;
+    color: #374155;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+  }
+  .challenge-item .solution::before {
+    content: "✅ Solution: ";
+    font-weight: 700;
+    color: #059669;
+  }
+
+  /* ── TEST TABLE ── */
+  .test-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .pass { background: #dcfce7; color: #166534; }
+  .unit { background: #dbeafe; color: #1e40af; }
+  .intg { background: #fce7f3; color: #9d174d; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 11.5px;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 60px;
+  }
+
+  @media print {
+    .section { page-break-before: always; }
+    pre { white-space: pre-wrap; }
+    .cover { min-height: auto; padding: 80px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  COVER PAGE                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">Spring Boot Project Report</div>
+  <h1>Student–Course Management<br>System</h1>
+  <h2>A Full-Stack Spring Boot MVC Application with JPA, JSP & JUnit</h2>
+  <div class="divider"></div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Developer</div>
+      <div class="value">P. Vishwa Kanth Reddy</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Course</div>
+      <div class="value">Spring Boot Full-Stack Development</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">GitHub Repository</div>
+      <div class="value">pvishwakanthreddy-netizen/<br>coursera-project</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Date</div>
+      <div class="value">April 2026</div>
+    </div>
+  </div>
+
+  <div class="tech-pills">
+    <span class="tech-pill">Spring Boot 3</span>
+    <span class="tech-pill">Spring MVC</span>
+    <span class="tech-pill">Spring Data JPA</span>
+    <span class="tech-pill">Hibernate</span>
+    <span class="tech-pill">MySQL</span>
+    <span class="tech-pill">JSP / JSTL</span>
+    <span class="tech-pill">JUnit 5</span>
+    <span class="tech-pill">Mockito</span>
+    <span class="tech-pill">Maven</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TABLE OF CONTENTS                                        -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <div class="toc-title">Table of Contents</div>
+
+  <div class="toc-item">
+    <span class="toc-num">1</span>
+    <span class="toc-text">Project Overview &amp; Architecture</span>
+    <span class="toc-page-num">3</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">1.1 Application Architecture</span>
+    <span class="toc-page-num">3</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">1.2 Technology Stack</span>
+    <span class="toc-page-num">3</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">2</span>
+    <span class="toc-text">Entity Relationship Design</span>
+    <span class="toc-page-num">4</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">2.1 ER Diagram</span>
+    <span class="toc-page-num">4</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">2.2 Entity Classes – Student &amp; Course</span>
+    <span class="toc-page-num">4</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">3</span>
+    <span class="toc-text">Database Population</span>
+    <span class="toc-page-num">6</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">4</span>
+    <span class="toc-text">Repository Layer</span>
+    <span class="toc-page-num">7</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">5</span>
+    <span class="toc-text">Service Layer</span>
+    <span class="toc-page-num">8</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">6</span>
+    <span class="toc-text">Controller Layer</span>
+    <span class="toc-page-num">10</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">6.1 Create Operation</span>
+    <span class="toc-page-num">10</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">6.2 Read Operation</span>
+    <span class="toc-page-num">11</span>
+  </div>
+  <div class="toc-item toc-sub">
+    <span class="toc-num"></span>
+    <span class="toc-text">6.3 Update Operation</span>
+    <span class="toc-page-num">12</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">7</span>
+    <span class="toc-text">View Layer (JSP Pages)</span>
+    <span class="toc-page-num">13</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">8</span>
+    <span class="toc-text">Exception Handling</span>
+    <span class="toc-page-num">16</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">9</span>
+    <span class="toc-text">Unit Testing</span>
+    <span class="toc-page-num">17</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">10</span>
+    <span class="toc-text">Application Configuration</span>
+    <span class="toc-page-num">19</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">11</span>
+    <span class="toc-text">Challenges &amp; Solutions</span>
+    <span class="toc-page-num">20</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">12</span>
+    <span class="toc-text">Screenshots</span>
+    <span class="toc-page-num">21</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">13</span>
+    <span class="toc-text">Conclusion &amp; GitHub Reference</span>
+    <span class="toc-page-num">22</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 1: Overview                                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="content">
+<div class="section">
+  <h1 class="sec-title">1. Project Overview &amp; Architecture</h1>
+
+  <p>This project implements a <strong>Student–Course Management System</strong> using Spring Boot 3, Spring MVC, Spring Data JPA (Hibernate), JSP/JSTL for views, and MySQL as the relational database. The application supports full <strong>Create, Read, and Update</strong> operations for two related entities: <code>Student</code> and <code>Course</code>, along with an inner-join query, exception handling, and comprehensive unit tests.</p>
+
+  <h2 class="sub-title">1.1 Application Architecture</h2>
+  <p>The application follows the standard <strong>Layered (N-Tier) Architecture</strong> used in enterprise Spring MVC applications:</p>
+
+  <div class="layer-grid">
+    <div class="layer-card">
+      <div class="layer-card-header bg-purple">🌐 View Layer (JSP + JSTL + CSS)</div>
+      <div class="layer-card-body">JSP pages handle all UI rendering. JSTL tags and EL expressions are used for dynamic data binding. CSS provides responsive, visually appealing styling.</div>
+    </div>
+    <div class="layer-card">
+      <div class="layer-card-header bg-blue">🎮 Controller Layer (Spring MVC)</div>
+      <div class="layer-card-body">Handles HTTP requests, binds form data to model objects, calls the service layer, and forwards results to the appropriate JSP view.</div>
+    </div>
+    <div class="layer-card">
+      <div class="layer-card-header bg-green">⚙️ Service Layer</div>
+      <div class="layer-card-body">Contains business logic. Acts as a bridge between controller and repository. Handles transaction management and validation rules.</div>
+    </div>
+    <div class="layer-card">
+      <div class="layer-card-header bg-orange">🗄️ Repository Layer (Spring Data JPA)</div>
+      <div class="layer-card-body">Extends JpaRepository for CRUD operations. Contains custom JPQL queries including the required inner-join between Student and Course.</div>
+    </div>
+  </div>
+
+  <h2 class="sub-title">1.2 Technology Stack</h2>
+  <table class="data-table">
+    <tr><th>Component</th><th>Technology</th><th>Version</th></tr>
+    <tr><td>Core Framework</td><td>Spring Boot</td><td>3.2.x</td></tr>
+    <tr><td>Web MVC</td><td>Spring MVC</td><td>6.x</td></tr>
+    <tr><td>ORM / JPA</td><td>Hibernate / Spring Data JPA</td><td>6.x</td></tr>
+    <tr><td>Database</td><td>MySQL</td><td>8.0</td></tr>
+    <tr><td>View Technology</td><td>JSP + JSTL</td><td>1.2</td></tr>
+    <tr><td>Build Tool</td><td>Apache Maven</td><td>3.9.x</td></tr>
+    <tr><td>Testing</td><td>JUnit 5 + Mockito</td><td>5.x / 5.x</td></tr>
+    <tr><td>Java Version</td><td>Java</td><td>17</td></tr>
+    <tr><td>Embedded Server</td><td>Apache Tomcat (embedded)</td><td>10.x</td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 2: Entity Relationship Design                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">2. Entity Relationship Design</h1>
+
+  <h2 class="sub-title">2.1 ER Diagram</h2>
+  <p>The system uses two main entities. A <strong>Course</strong> can have many <strong>Students</strong> enrolled in it — a classic <code>@ManyToOne</code> relationship from the Student side (each student belongs to one course at a time).</p>
+
+  <div class="er-container">
+    <div class="er-table">
+      <div class="er-table-header">📚 Course</div>
+      <div class="er-table-row"><span class="pk">PK</span> id (BIGINT, AUTO)</div>
+      <div class="er-table-row">courseName (VARCHAR 100, NOT NULL)</div>
+      <div class="er-table-row">courseCode (VARCHAR 20, UNIQUE)</div>
+      <div class="er-table-row">instructor (VARCHAR 100)</div>
+      <div class="er-table-row">credits (INT)</div>
+      <div class="er-table-row">description (TEXT)</div>
+    </div>
+
+    <div class="er-rel">
+      <span style="font-size:11px; color:#7c3aed">1</span>
+      <div class="rel-line"></div>
+      <div class="rel-label">@OneToMany</div>
+      <div class="rel-line"></div>
+      <span style="font-size:11px; color:#7c3aed">N</span>
+    </div>
+
+    <div class="er-table">
+      <div class="er-table-header">🎓 Student</div>
+      <div class="er-table-row"><span class="pk">PK</span> id (BIGINT, AUTO)</div>
+      <div class="er-table-row">firstName (VARCHAR 50, NOT NULL)</div>
+      <div class="er-table-row">lastName (VARCHAR 50, NOT NULL)</div>
+      <div class="er-table-row">email (VARCHAR 100, UNIQUE)</div>
+      <div class="er-table-row">phone (VARCHAR 15)</div>
+      <div class="er-table-row">enrollmentDate (DATE)</div>
+      <div class="er-table-row"><span class="fk">FK</span> course_id → Course.id</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>Relationship:</strong> One Course → Many Students (OneToMany / ManyToOne). The foreign key <code>course_id</code> resides in the <code>student</code> table. Cascade type is set to <code>PERSIST</code> and <code>MERGE</code>, with <code>fetch = EAGER</code> on the Student side for convenient access.
+  </div>
+
+  <h2 class="sub-title">2.2 Entity Classes</h2>
+
+  <h3 class="sub-sub-title">Course.java</h3>
+<pre><code><span class="pkg">package com.example.studentcourse.entity;</span>
+
+<span class="ann">@Entity</span>
+<span class="ann">@Table</span>(name = <span class="str">"course"</span>)
+<span class="kw">public class</span> <span class="typ">Course</span> {
+
+    <span class="ann">@Id</span>
+    <span class="ann">@GeneratedValue</span>(strategy = <span class="typ">GenerationType</span>.IDENTITY)
+    <span class="kw">private</span> <span class="typ">Long</span> id;
+
+    <span class="ann">@Column</span>(name = <span class="str">"course_name"</span>, nullable = <span class="kw">false</span>, length = <span class="num">100</span>)
+    <span class="kw">private</span> <span class="typ">String</span> courseName;
+
+    <span class="ann">@Column</span>(name = <span class="str">"course_code"</span>, unique = <span class="kw">true</span>, length = <span class="num">20</span>)
+    <span class="kw">private</span> <span class="typ">String</span> courseCode;
+
+    <span class="ann">@Column</span>(name = <span class="str">"instructor"</span>)
+    <span class="kw">private</span> <span class="typ">String</span> instructor;
+
+    <span class="ann">@Column</span>(name = <span class="str">"credits"</span>)
+    <span class="kw">private</span> <span class="typ">Integer</span> credits;
+
+    <span class="ann">@Column</span>(name = <span class="str">"description"</span>, columnDefinition = <span class="str">"TEXT"</span>)
+    <span class="kw">private</span> <span class="typ">String</span> description;
+
+    <span class="ann">@OneToMany</span>(mappedBy = <span class="str">"course"</span>, cascade = <span class="typ">CascadeType</span>.ALL,
+               fetch = <span class="typ">FetchType</span>.LAZY)
+    <span class="kw">private</span> <span class="typ">List</span>&lt;<span class="typ">Student</span>&gt; students = <span class="kw">new</span> <span class="typ">ArrayList</span>&lt;&gt;();
+
+    <span class="cmt">// Constructors, Getters, Setters omitted for brevity</span>
+}</code></pre>
+
+  <h3 class="sub-sub-title">Student.java</h3>
+<pre><code><span class="pkg">package com.example.studentcourse.entity;</span>
+
+<span class="ann">@Entity</span>
+<span class="ann">@Table</span>(name = <span class="str">"student"</span>)
+<span class="kw">public class</span> <span class="typ">Student</span> {
+
+    <span class="ann">@Id</span>
+    <span class="ann">@GeneratedValue</span>(strategy = <span class="typ">GenerationType</span>.IDENTITY)
+    <span class="kw">private</span> <span class="typ">Long</span> id;
+
+    <span class="ann">@Column</span>(name = <span class="str">"first_name"</span>, nullable = <span class="kw">false</span>, length = <span class="num">50</span>)
+    <span class="kw">private</span> <span class="typ">String</span> firstName;
+
+    <span class="ann">@Column</span>(name = <span class="str">"last_name"</span>, nullable = <span class="kw">false</span>, length = <span class="num">50</span>)
+    <span class="kw">private</span> <span class="typ">String</span> lastName;
+
+    <span class="ann">@Column</span>(name = <span class="str">"email"</span>, unique = <span class="kw">true</span>, length = <span class="num">100</span>)
+    <span class="kw">private</span> <span class="typ">String</span> email;
+
+    <span class="ann">@Column</span>(name = <span class="str">"phone"</span>, length = <span class="num">15</span>)
+    <span class="kw">private</span> <span class="typ">String</span> phone;
+
+    <span class="ann">@Column</span>(name = <span class="str">"enrollment_date"</span>)
+    <span class="ann">@DateTimeFormat</span>(pattern = <span class="str">"yyyy-MM-dd"</span>)
+    <span class="kw">private</span> <span class="typ">LocalDate</span> enrollmentDate;
+
+    <span class="ann">@ManyToOne</span>(fetch = <span class="typ">FetchType</span>.EAGER)
+    <span class="ann">@JoinColumn</span>(name = <span class="str">"course_id"</span>, nullable = <span class="kw">false</span>)
+    <span class="kw">private</span> <span class="typ">Course</span> course;
+
+    <span class="cmt">// Constructors, Getters, Setters omitted for brevity</span>
+}</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 3: Database Population                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">3. Database Population</h1>
+
+  <p>The database is populated using a <code>DataInitializer</code> component that runs on application startup via Spring's <code>@PostConstruct</code> annotation. This ensures 10 rows in each table when the database is empty.</p>
+
+<pre><code><span class="pkg">package com.example.studentcourse.config;</span>
+
+<span class="ann">@Component</span>
+<span class="kw">public class</span> <span class="typ">DataInitializer</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">CourseRepository</span> courseRepository;
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">StudentRepository</span> studentRepository;
+
+    <span class="ann">@PostConstruct</span>
+    <span class="kw">public void</span> <span class="fn">init</span>() {
+        <span class="kw">if</span> (courseRepository.count() == <span class="num">0</span>) {
+            <span class="typ">Course</span> c1 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Data Structures"</span>,       <span class="str">"CS101"</span>, <span class="str">"Dr. Rao"</span>,    <span class="num">4</span>, <span class="str">"Fundamentals of DSA"</span>));
+            <span class="typ">Course</span> c2 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Database Management"</span>,    <span class="str">"CS201"</span>, <span class="str">"Dr. Patel"</span>,  <span class="num">3</span>, <span class="str">"SQL and NoSQL systems"</span>));
+            <span class="typ">Course</span> c3 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Operating Systems"</span>,      <span class="str">"CS301"</span>, <span class="str">"Dr. Gupta"</span>,  <span class="num">4</span>, <span class="str">"OS concepts and design"</span>));
+            <span class="typ">Course</span> c4 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Computer Networks"</span>,      <span class="str">"CS401"</span>, <span class="str">"Dr. Sharma"</span>, <span class="num">3</span>, <span class="str">"TCP/IP and protocols"</span>));
+            <span class="typ">Course</span> c5 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Software Engineering"</span>,   <span class="str">"CS501"</span>, <span class="str">"Dr. Singh"</span>,  <span class="num">3</span>, <span class="str">"SDLC methodologies"</span>));
+            <span class="typ">Course</span> c6 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Machine Learning"</span>,       <span class="str">"CS601"</span>, <span class="str">"Dr. Kumar"</span>,  <span class="num">4</span>, <span class="str">"ML algorithms"</span>));
+            <span class="typ">Course</span> c7 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Web Development"</span>,         <span class="str">"CS701"</span>, <span class="str">"Dr. Verma"</span>,  <span class="num">3</span>, <span class="str">"Full-stack web dev"</span>));
+            <span class="typ">Course</span> c8 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Cloud Computing"</span>,         <span class="str">"CS801"</span>, <span class="str">"Dr. Mehta"</span>,  <span class="num">3</span>, <span class="str">"AWS and Azure"</span>));
+            <span class="typ">Course</span> c9 = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Cybersecurity"</span>,           <span class="str">"CS901"</span>, <span class="str">"Dr. Reddy"</span>,  <span class="num">4</span>, <span class="str">"Security fundamentals"</span>));
+            <span class="typ">Course</span> c10= courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Artificial Intelligence"</span>,  <span class="str">"CS001"</span>, <span class="str">"Dr. Nair"</span>,   <span class="num">4</span>, <span class="str">"AI and reasoning"</span>));
+
+            studentRepository.saveAll(<span class="typ">List</span>.of(
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Arjun"</span>,   <span class="str">"Reddy"</span>,   <span class="str">"arjun@edu.in"</span>,   <span class="str">"9000001111"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">7</span>,<span class="num">1</span>),  c1),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Priya"</span>,   <span class="str">"Sharma"</span>,  <span class="str">"priya@edu.in"</span>,   <span class="str">"9000002222"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">7</span>,<span class="num">1</span>),  c2),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Rahul"</span>,   <span class="str">"Gupta"</span>,   <span class="str">"rahul@edu.in"</span>,   <span class="str">"9000003333"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">8</span>,<span class="num">1</span>),  c3),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Sneha"</span>,   <span class="str">"Patel"</span>,   <span class="str">"sneha@edu.in"</span>,   <span class="str">"9000004444"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">8</span>,<span class="num">15</span>), c4),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Kiran"</span>,   <span class="str">"Kumar"</span>,   <span class="str">"kiran@edu.in"</span>,   <span class="str">"9000005555"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">9</span>,<span class="num">1</span>),  c5),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Divya"</span>,   <span class="str">"Singh"</span>,   <span class="str">"divya@edu.in"</span>,   <span class="str">"9000006666"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">9</span>,<span class="num">10</span>), c6),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Vikram"</span>,  <span class="str">"Verma"</span>,   <span class="str">"vikram@edu.in"</span>,  <span class="str">"9000007777"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">9</span>,<span class="num">15</span>), c7),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Anjali"</span>,  <span class="str">"Mehta"</span>,   <span class="str">"anjali@edu.in"</span>,  <span class="str">"9000008888"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">10</span>,<span class="num">1</span>), c8),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Suresh"</span>,  <span class="str">"Nair"</span>,    <span class="str">"suresh@edu.in"</span>,  <span class="str">"9000009999"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">10</span>,<span class="num">5</span>), c9),
+                <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Lakshmi"</span>, <span class="str">"Rao"</span>,     <span class="str">"lakshmi@edu.in"</span>, <span class="str">"9000000000"</span>, <span class="typ">LocalDate</span>.of(<span class="num">2023</span>,<span class="num">11</span>,<span class="num">1</span>), c10)
+            ));
+        }
+    }
+}</code></pre>
+
+  <h2 class="sub-title">3.1 Sample Data Tables</h2>
+  <p><strong>Courses (10 rows):</strong></p>
+  <table class="data-table">
+    <tr><th>ID</th><th>Course Name</th><th>Code</th><th>Instructor</th><th>Credits</th></tr>
+    <tr><td>1</td><td>Data Structures</td><td>CS101</td><td>Dr. Rao</td><td>4</td></tr>
+    <tr><td>2</td><td>Database Management</td><td>CS201</td><td>Dr. Patel</td><td>3</td></tr>
+    <tr><td>3</td><td>Operating Systems</td><td>CS301</td><td>Dr. Gupta</td><td>4</td></tr>
+    <tr><td>4</td><td>Computer Networks</td><td>CS401</td><td>Dr. Sharma</td><td>3</td></tr>
+    <tr><td>5</td><td>Software Engineering</td><td>CS501</td><td>Dr. Singh</td><td>3</td></tr>
+    <tr><td>6</td><td>Machine Learning</td><td>CS601</td><td>Dr. Kumar</td><td>4</td></tr>
+    <tr><td>7</td><td>Web Development</td><td>CS701</td><td>Dr. Verma</td><td>3</td></tr>
+    <tr><td>8</td><td>Cloud Computing</td><td>CS801</td><td>Dr. Mehta</td><td>3</td></tr>
+    <tr><td>9</td><td>Cybersecurity</td><td>CS901</td><td>Dr. Reddy</td><td>4</td></tr>
+    <tr><td>10</td><td>Artificial Intelligence</td><td>CS001</td><td>Dr. Nair</td><td>4</td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 4: Repository Layer                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">4. Repository Layer</h1>
+
+  <p>Both repositories extend <code>JpaRepository</code>, providing built-in CRUD operations. A custom JPQL query performs an inner join between <code>Student</code> and <code>Course</code>.</p>
+
+  <h2 class="sub-title">CourseRepository.java</h2>
+<pre><code><span class="pkg">package com.example.studentcourse.repository;</span>
+
+<span class="ann">@Repository</span>
+<span class="kw">public interface</span> <span class="typ">CourseRepository</span> <span class="kw">extends</span> <span class="typ">JpaRepository</span>&lt;<span class="typ">Course</span>, <span class="typ">Long</span>&gt; {
+
+    <span class="ann">@Query</span>(<span class="str">"SELECT c FROM Course c WHERE c.courseCode = :code"</span>)
+    <span class="typ">Optional</span>&lt;<span class="typ">Course</span>&gt; <span class="fn">findByCourseCode</span>(<span class="ann">@Param</span>(<span class="str">"code"</span>) <span class="typ">String</span> code);
+
+    <span class="typ">List</span>&lt;<span class="typ">Course</span>&gt; <span class="fn">findByCourseName</span>(<span class="typ">String</span> courseName);
+}</code></pre>
+
+  <h2 class="sub-title">StudentRepository.java (with Inner Join Query)</h2>
+<pre><code><span class="pkg">package com.example.studentcourse.repository;</span>
+
+<span class="ann">@Repository</span>
+<span class="kw">public interface</span> <span class="typ">StudentRepository</span> <span class="kw">extends</span> <span class="typ">JpaRepository</span>&lt;<span class="typ">Student</span>, <span class="typ">Long</span>&gt; {
+
+    <span class="cmt">// Custom JPQL inner join query – returns student + course info</span>
+    <span class="ann">@Query</span>(<span class="str">"SELECT s FROM Student s INNER JOIN s.course c WHERE c.id = :courseId"</span>)
+    <span class="typ">List</span>&lt;<span class="typ">Student</span>&gt; <span class="fn">findStudentsByCourseId</span>(<span class="ann">@Param</span>(<span class="str">"courseId"</span>) <span class="typ">Long</span> courseId);
+
+    <span class="cmt">// Inner join projection – returns student name + course name as Object[]</span>
+    <span class="ann">@Query</span>(<span class="str">"SELECT s.firstName, s.lastName, c.courseName, c.instructor "
+         + "FROM Student s INNER JOIN s.course c"</span>)
+    <span class="typ">List</span>&lt;<span class="typ">Object</span>[]&gt; <span class="fn">findAllStudentsWithCourseDetails</span>();
+
+    <span class="typ">Optional</span>&lt;<span class="typ">Student</span>&gt; <span class="fn">findByEmail</span>(<span class="typ">String</span> email);
+
+    <span class="typ">List</span>&lt;<span class="typ">Student</span>&gt; <span class="fn">findByCourseId</span>(<span class="typ">Long</span> courseId);
+}</code></pre>
+
+  <div class="info-box">
+    <strong>Inner Join Query:</strong> The method <code>findAllStudentsWithCourseDetails()</code> performs a JPQL inner join that matches every student to their enrolled course. This returns a list of <code>Object[]</code> arrays, each holding the student's name, the course name, and the instructor — which is then consumed by the service layer and displayed in the read view.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 5: Service Layer                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">5. Service Layer</h1>
+
+  <h2 class="sub-title">StudentService.java</h2>
+<pre><code><span class="pkg">package com.example.studentcourse.service;</span>
+
+<span class="ann">@Service</span>
+<span class="ann">@Transactional</span>
+<span class="kw">public class</span> <span class="typ">StudentService</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">StudentRepository</span> studentRepository;
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">CourseRepository</span>  courseRepository;
+
+    <span class="kw">public</span> <span class="typ">List</span>&lt;<span class="typ">Student</span>&gt; <span class="fn">getAllStudents</span>() {
+        <span class="kw">return</span> studentRepository.findAll();
+    }
+
+    <span class="kw">public</span> <span class="typ">Student</span> <span class="fn">getStudentById</span>(<span class="typ">Long</span> id) {
+        <span class="kw">return</span> studentRepository.findById(id)
+            .orElseThrow(() -&gt; <span class="kw">new</span> <span class="typ">EntityNotFoundException</span>(<span class="str">"Student not found: "</span> + id));
+    }
+
+    <span class="kw">public</span> <span class="typ">Student</span> <span class="fn">saveStudent</span>(<span class="typ">Student</span> student) {
+        <span class="kw">if</span> (studentRepository.findByEmail(student.getEmail()).isPresent()) {
+            <span class="kw">throw new</span> <span class="typ">DuplicateEmailException</span>(<span class="str">"Email already registered: "</span> + student.getEmail());
+        }
+        <span class="kw">return</span> studentRepository.save(student);
+    }
+
+    <span class="kw">public</span> <span class="typ">Student</span> <span class="fn">updateStudent</span>(<span class="typ">Long</span> id, <span class="typ">Student</span> updated) {
+        <span class="typ">Student</span> existing = <span class="fn">getStudentById</span>(id);
+        existing.setFirstName(updated.getFirstName());
+        existing.setLastName(updated.getLastName());
+        existing.setEmail(updated.getEmail());
+        existing.setPhone(updated.getPhone());
+        existing.setEnrollmentDate(updated.getEnrollmentDate());
+        existing.setCourse(updated.getCourse());
+        <span class="kw">return</span> studentRepository.save(existing);
+    }
+
+    <span class="kw">public</span> <span class="typ">List</span>&lt;<span class="typ">Object</span>[]&gt; <span class="fn">getStudentsWithCourseDetails</span>() {
+        <span class="kw">return</span> studentRepository.findAllStudentsWithCourseDetails();
+    }
+}</code></pre>
+
+  <h2 class="sub-title">CourseService.java</h2>
+<pre><code><span class="pkg">package com.example.studentcourse.service;</span>
+
+<span class="ann">@Service</span>
+<span class="ann">@Transactional</span>
+<span class="kw">public class</span> <span class="typ">CourseService</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">CourseRepository</span> courseRepository;
+
+    <span class="kw">public</span> <span class="typ">List</span>&lt;<span class="typ">Course</span>&gt; <span class="fn">getAllCourses</span>() {
+        <span class="kw">return</span> courseRepository.findAll();
+    }
+
+    <span class="kw">public</span> <span class="typ">Course</span> <span class="fn">getCourseById</span>(<span class="typ">Long</span> id) {
+        <span class="kw">return</span> courseRepository.findById(id)
+            .orElseThrow(() -&gt; <span class="kw">new</span> <span class="typ">EntityNotFoundException</span>(<span class="str">"Course not found: "</span> + id));
+    }
+
+    <span class="kw">public</span> <span class="typ">Course</span> <span class="fn">saveCourse</span>(<span class="typ">Course</span> course) {
+        <span class="kw">if</span> (courseRepository.findByCourseCode(course.getCourseCode()).isPresent()) {
+            <span class="kw">throw new</span> <span class="typ">DuplicateCourseCodeException</span>(<span class="str">"Course code already exists: "</span> + course.getCourseCode());
+        }
+        <span class="kw">return</span> courseRepository.save(course);
+    }
+
+    <span class="kw">public</span> <span class="typ">Course</span> <span class="fn">updateCourse</span>(<span class="typ">Long</span> id, <span class="typ">Course</span> updated) {
+        <span class="typ">Course</span> existing = <span class="fn">getCourseById</span>(id);
+        existing.setCourseName(updated.getCourseName());
+        existing.setCourseCode(updated.getCourseCode());
+        existing.setInstructor(updated.getInstructor());
+        existing.setCredits(updated.getCredits());
+        existing.setDescription(updated.getDescription());
+        <span class="kw">return</span> courseRepository.save(existing);
+    }
+}</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 6: Controller Layer                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">6. Controller Layer</h1>
+
+  <h2 class="sub-title">6.1 Create Operation – StudentController</h2>
+<pre><code><span class="pkg">package com.example.studentcourse.controller;</span>
+
+<span class="ann">@Controller</span>
+<span class="ann">@RequestMapping</span>(<span class="str">"/students"</span>)
+<span class="kw">public class</span> <span class="typ">StudentController</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">StudentService</span> studentService;
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">CourseService</span>  courseService;
+
+    <span class="cmt">// ── Show add-student form ──</span>
+    <span class="ann">@GetMapping</span>(<span class="str">"/add"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">showAddForm</span>(<span class="typ">Model</span> model) {
+        model.addAttribute(<span class="str">"student"</span>, <span class="kw">new</span> <span class="typ">Student</span>());
+        model.addAttribute(<span class="str">"courses"</span>, courseService.getAllCourses());
+        <span class="kw">return</span> <span class="str">"student/add-student"</span>;
+    }
+
+    <span class="cmt">// ── Handle form submission (Create) ──</span>
+    <span class="ann">@PostMapping</span>(<span class="str">"/add"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">addStudent</span>(<span class="ann">@ModelAttribute</span>(<span class="str">"student"</span>) <span class="ann">@Valid</span> <span class="typ">Student</span> student,
+                              <span class="typ">BindingResult</span> bindingResult,
+                              <span class="ann">@RequestParam</span>(<span class="str">"courseId"</span>) <span class="typ">Long</span> courseId,
+                              <span class="typ">Model</span> model,
+                              <span class="typ">RedirectAttributes</span> redirectAttrs) {
+        <span class="kw">if</span> (bindingResult.hasErrors()) {
+            model.addAttribute(<span class="str">"courses"</span>, courseService.getAllCourses());
+            <span class="kw">return</span> <span class="str">"student/add-student"</span>;
+        }
+        <span class="kw">try</span> {
+            <span class="typ">Course</span> course = courseService.getCourseById(courseId);
+            student.setCourse(course);
+            studentService.saveStudent(student);
+            redirectAttrs.addFlashAttribute(<span class="str">"successMsg"</span>, <span class="str">"Student added successfully!"</span>);
+            <span class="kw">return</span> <span class="str">"redirect:/students/list"</span>;
+        } <span class="kw">catch</span> (<span class="typ">DuplicateEmailException</span> e) {
+            model.addAttribute(<span class="str">"errorMsg"</span>, e.getMessage());
+            model.addAttribute(<span class="str">"courses"</span>, courseService.getAllCourses());
+            <span class="kw">return</span> <span class="str">"student/add-student"</span>;
+        }
+    }
+}</code></pre>
+
+  <h2 class="sub-title">6.2 Read Operation</h2>
+<pre><code>    <span class="cmt">// ── List all students ──</span>
+    <span class="ann">@GetMapping</span>(<span class="str">"/list"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">listStudents</span>(<span class="typ">Model</span> model) {
+        model.addAttribute(<span class="str">"students"</span>, studentService.getAllStudents());
+        <span class="kw">return</span> <span class="str">"student/list-students"</span>;
+    }
+
+    <span class="cmt">// ── Inner join view – students with course info ──</span>
+    <span class="ann">@GetMapping</span>(<span class="str">"/with-courses"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">studentsWithCourses</span>(<span class="typ">Model</span> model) {
+        model.addAttribute(<span class="str">"studentCourseData"</span>,
+            studentService.getStudentsWithCourseDetails());
+        <span class="kw">return</span> <span class="str">"student/students-with-courses"</span>;
+    }
+
+    <span class="cmt">// ── List all courses ──</span>
+    <span class="ann">@GetMapping</span>(<span class="str">"/courses"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">listCourses</span>(<span class="typ">Model</span> model) {
+        model.addAttribute(<span class="str">"courses"</span>, courseService.getAllCourses());
+        <span class="kw">return</span> <span class="str">"course/list-courses"</span>;
+    }</code></pre>
+
+  <h2 class="sub-title">6.3 Update Operation</h2>
+<pre><code>    <span class="cmt">// ── Show edit form ──</span>
+    <span class="ann">@GetMapping</span>(<span class="str">"/edit/{id}"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">showEditForm</span>(<span class="ann">@PathVariable</span> <span class="typ">Long</span> id, <span class="typ">Model</span> model) {
+        model.addAttribute(<span class="str">"student"</span>, studentService.getStudentById(id));
+        model.addAttribute(<span class="str">"courses"</span>, courseService.getAllCourses());
+        <span class="kw">return</span> <span class="str">"student/edit-student"</span>;
+    }
+
+    <span class="cmt">// ── Handle update submission ──</span>
+    <span class="ann">@PostMapping</span>(<span class="str">"/edit/{id}"</span>)
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">updateStudent</span>(<span class="ann">@PathVariable</span> <span class="typ">Long</span> id,
+                                 <span class="ann">@ModelAttribute</span>(<span class="str">"student"</span>) <span class="ann">@Valid</span> <span class="typ">Student</span> student,
+                                 <span class="typ">BindingResult</span> bindingResult,
+                                 <span class="ann">@RequestParam</span>(<span class="str">"courseId"</span>) <span class="typ">Long</span> courseId,
+                                 <span class="typ">Model</span> model,
+                                 <span class="typ">RedirectAttributes</span> redirectAttrs) {
+        <span class="kw">if</span> (bindingResult.hasErrors()) {
+            model.addAttribute(<span class="str">"courses"</span>, courseService.getAllCourses());
+            <span class="kw">return</span> <span class="str">"student/edit-student"</span>;
+        }
+        <span class="typ">Course</span> course = courseService.getCourseById(courseId);
+        student.setCourse(course);
+        studentService.updateStudent(id, student);
+        redirectAttrs.addFlashAttribute(<span class="str">"successMsg"</span>, <span class="str">"Student updated successfully!"</span>);
+        <span class="kw">return</span> <span class="str">"redirect:/students/list"</span>;
+    }</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 7: View Layer                                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">7. View Layer (JSP Pages)</h1>
+
+  <p>All JSP pages are located under <code>src/main/webapp/WEB-INF/views/</code>. They use JSTL core and fmt tag libraries, and a shared CSS stylesheet for consistent styling.</p>
+
+  <h2 class="sub-title">7.1 add-student.jsp (Create Form)</h2>
+<pre><code><span class="cmt">&lt;%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %&gt;</span>
+<span class="cmt">&lt;%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Add Student&lt;/title&gt;
+  &lt;link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="container"&gt;
+    &lt;h2 class="page-title"&gt;Add New Student&lt;/h2&gt;
+
+    <span class="cmt">&lt;!-- Error / Success messages --&gt;</span>
+    &lt;c:if test="${not empty errorMsg}"&gt;
+      &lt;div class="alert alert-danger"&gt;${errorMsg}&lt;/div&gt;
+    &lt;/c:if&gt;
+
+    &lt;form:form method="POST" action="/students/add" modelAttribute="student"&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label&gt;First Name&lt;/label&gt;
+        &lt;form:input path="firstName" cssClass="form-control" required="true" /&gt;
+        &lt;form:errors path="firstName" cssClass="field-error" /&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label&gt;Last Name&lt;/label&gt;
+        &lt;form:input path="lastName" cssClass="form-control" required="true" /&gt;
+        &lt;form:errors path="lastName" cssClass="field-error" /&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;form:input path="email" type="email" cssClass="form-control" /&gt;
+        &lt;form:errors path="email" cssClass="field-error" /&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label&gt;Phone&lt;/label&gt;
+        &lt;form:input path="phone" cssClass="form-control" /&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label&gt;Enrollment Date&lt;/label&gt;
+        &lt;form:input path="enrollmentDate" type="date" cssClass="form-control" /&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label&gt;Course&lt;/label&gt;
+        &lt;select name="courseId" class="form-control"&gt;
+          &lt;c:forEach var="course" items="${courses}"&gt;
+            &lt;option value="${course.id}"&gt;${course.courseName} (${course.courseCode})&lt;/option&gt;
+          &lt;/c:forEach&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+      &lt;button type="submit" class="btn btn-primary"&gt;Add Student&lt;/button&gt;
+      &lt;a href="/students/list" class="btn btn-secondary"&gt;Cancel&lt;/a&gt;
+    &lt;/form:form&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+  <div class="screenshot">
+    <div class="icon">🖼️</div>
+    <strong>Screenshot: Add Student Form</strong>
+    A form page with input fields for First Name, Last Name, Email, Phone, Enrollment Date, and a Course dropdown. A "Add Student" button submits the form. Validation errors appear in red below each field if required fields are empty or email format is wrong.
+  </div>
+
+  <h2 class="sub-title">7.2 list-students.jsp (Read View)</h2>
+<pre><code>&lt;div class="table-wrapper"&gt;
+  &lt;table class="table"&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;ID&lt;/th&gt;&lt;th&gt;First Name&lt;/th&gt;&lt;th&gt;Last Name&lt;/th&gt;
+        &lt;th&gt;Email&lt;/th&gt;&lt;th&gt;Course&lt;/th&gt;&lt;th&gt;Actions&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;c:forEach var="student" items="${students}"&gt;
+        &lt;tr&gt;
+          &lt;td&gt;${student.id}&lt;/td&gt;
+          &lt;td&gt;${student.firstName}&lt;/td&gt;
+          &lt;td&gt;${student.lastName}&lt;/td&gt;
+          &lt;td&gt;${student.email}&lt;/td&gt;
+          &lt;td&gt;&lt;span class="badge"&gt;${student.course.courseName}&lt;/span&gt;&lt;/td&gt;
+          &lt;td&gt;
+            &lt;a href="/students/edit/${student.id}" class="btn btn-sm btn-warning"&gt;Edit&lt;/a&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/c:forEach&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+
+  <div class="screenshot">
+    <div class="icon">🖼️</div>
+    <strong>Screenshot: Student List Page</strong>
+    A responsive table showing all students with their ID, first name, last name, email, and enrolled course highlighted with a badge. Each row has an "Edit" button. Success message ("Student added successfully!") appears as a green banner at the top when redirected after a create/update.
+  </div>
+
+  <h2 class="sub-title">7.3 students-with-courses.jsp (Inner Join View)</h2>
+<pre><code>&lt;h2&gt;Students with Course Details (Inner Join)&lt;/h2&gt;
+&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;First Name&lt;/th&gt;&lt;th&gt;Last Name&lt;/th&gt;&lt;th&gt;Course&lt;/th&gt;&lt;th&gt;Instructor&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;c:forEach var="row" items="${studentCourseData}"&gt;
+      &lt;tr&gt;
+        &lt;td&gt;${row[0]}&lt;/td&gt;   <span class="cmt">&lt;%-- firstName --%&gt;</span>
+        &lt;td&gt;${row[1]}&lt;/td&gt;   <span class="cmt">&lt;%-- lastName --%&gt;</span>
+        &lt;td&gt;${row[2]}&lt;/td&gt;   <span class="cmt">&lt;%-- courseName --%&gt;</span>
+        &lt;td&gt;${row[3]}&lt;/td&gt;   <span class="cmt">&lt;%-- instructor --%&gt;</span>
+      &lt;/tr&gt;
+    &lt;/c:forEach&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+
+  <h2 class="sub-title">7.4 CSS Styling (style.css – excerpt)</h2>
+<pre><code><span class="cmt">/* Global */</span>
+body { font-family: 'Segoe UI', sans-serif; background: #f4f6fc; color: #333; }
+.container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+
+<span class="cmt">/* Page title */</span>
+.page-title { font-size: 28px; color: #1a1a2e; border-left: 5px solid #7c3aed;
+              padding-left: 14px; margin-bottom: 24px; }
+
+<span class="cmt">/* Form */</span>
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 6px; }
+.form-control { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1;
+                border-radius: 8px; font-size: 14px; transition: border 0.2s; }
+.form-control:focus { border-color: #7c3aed; outline: none; }
+
+<span class="cmt">/* Buttons */</span>
+.btn { padding: 9px 22px; border: none; border-radius: 8px; cursor: pointer;
+       font-size: 14px; font-weight: 600; text-decoration: none; }
+.btn-primary  { background: #7c3aed; color: #fff; }
+.btn-warning  { background: #f59e0b; color: #fff; }
+.btn-secondary{ background: #94a3b8; color: #fff; }
+
+<span class="cmt">/* Table */</span>
+.table { width: 100%; border-collapse: collapse; background: #fff;
+         border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px #0001; }
+.table thead { background: #1a1a2e; color: #fff; }
+.table th, .table td { padding: 12px 16px; text-align: left; }
+.table tbody tr:hover { background: #f0f4ff; }
+
+<span class="cmt">/* Badge */</span>
+.badge { background: #ede9fe; color: #6d28d9; padding: 3px 12px;
+         border-radius: 20px; font-size: 12px; font-weight: 700; }
+
+<span class="cmt">/* Alerts */</span>
+.alert-success { background: #dcfce7; color: #166534; padding: 14px 18px;
+                 border-radius: 8px; border-left: 4px solid #22c55e; }
+.alert-danger  { background: #fee2e2; color: #991b1b; padding: 14px 18px;
+                 border-radius: 8px; border-left: 4px solid #ef4444; }</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 8: Exception Handling                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">8. Exception Handling</h1>
+
+  <p>Custom exceptions are defined and a global <code>@ControllerAdvice</code> handles them gracefully, showing user-friendly error pages instead of stack traces.</p>
+
+<pre><code><span class="cmt">// Custom exception for duplicate email</span>
+<span class="kw">public class</span> <span class="typ">DuplicateEmailException</span> <span class="kw">extends</span> <span class="typ">RuntimeException</span> {
+    <span class="kw">public</span> <span class="fn">DuplicateEmailException</span>(<span class="typ">String</span> msg) { <span class="kw">super</span>(msg); }
+}
+
+<span class="cmt">// Custom exception for duplicate course code</span>
+<span class="kw">public class</span> <span class="typ">DuplicateCourseCodeException</span> <span class="kw">extends</span> <span class="typ">RuntimeException</span> {
+    <span class="kw">public</span> <span class="fn">DuplicateCourseCodeException</span>(<span class="typ">String</span> msg) { <span class="kw">super</span>(msg); }
+}
+
+<span class="cmt">// Global exception handler</span>
+<span class="ann">@ControllerAdvice</span>
+<span class="kw">public class</span> <span class="typ">GlobalExceptionHandler</span> {
+
+    <span class="ann">@ExceptionHandler</span>(<span class="typ">EntityNotFoundException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="typ">ModelAndView</span> <span class="fn">handleEntityNotFound</span>(<span class="typ">EntityNotFoundException</span> ex) {
+        <span class="typ">ModelAndView</span> mav = <span class="kw">new</span> <span class="typ">ModelAndView</span>(<span class="str">"error/not-found"</span>);
+        mav.addObject(<span class="str">"message"</span>, ex.getMessage());
+        <span class="kw">return</span> mav;
+    }
+
+    <span class="ann">@ExceptionHandler</span>(<span class="typ">DataIntegrityViolationException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="typ">ModelAndView</span> <span class="fn">handleDataIntegrity</span>(<span class="typ">DataIntegrityViolationException</span> ex) {
+        <span class="typ">ModelAndView</span> mav = <span class="kw">new</span> <span class="typ">ModelAndView</span>(<span class="str">"error/integrity-error"</span>);
+        mav.addObject(<span class="str">"message"</span>,
+            <span class="str">"Data integrity violation. This record may already exist or a required field is missing."</span>);
+        <span class="kw">return</span> mav;
+    }
+
+    <span class="ann">@ExceptionHandler</span>(<span class="typ">Exception</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="typ">ModelAndView</span> <span class="fn">handleGeneral</span>(<span class="typ">Exception</span> ex) {
+        <span class="typ">ModelAndView</span> mav = <span class="kw">new</span> <span class="typ">ModelAndView</span>(<span class="str">"error/general-error"</span>);
+        mav.addObject(<span class="str">"message"</span>, ex.getMessage());
+        <span class="kw">return</span> mav;
+    }
+}</code></pre>
+
+  <div class="warn-box">
+    <strong>Integrity Violations handled:</strong> Duplicate email (UNIQUE constraint on student.email), duplicate course code (UNIQUE constraint on course.course_code), and null violations on NOT NULL columns. All are caught and shown as friendly messages in the UI rather than HTTP 500 errors.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 9: Unit Testing                                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">9. Unit Testing</h1>
+
+  <p>Unit tests cover the service layer using <strong>JUnit 5</strong> and <strong>Mockito</strong>, and repository tests use Spring's <code>@DataJpaTest</code> with an H2 in-memory database.</p>
+
+  <h2 class="sub-title">9.1 StudentServiceTest.java</h2>
+<pre><code><span class="pkg">package com.example.studentcourse.service;</span>
+
+<span class="ann">@ExtendWith</span>(<span class="typ">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="typ">StudentServiceTest</span> {
+
+    <span class="ann">@Mock</span>  <span class="kw">private</span> <span class="typ">StudentRepository</span> studentRepository;
+    <span class="ann">@Mock</span>  <span class="kw">private</span> <span class="typ">CourseRepository</span>  courseRepository;
+    <span class="ann">@InjectMocks</span> <span class="kw">private</span> <span class="typ">StudentService</span> studentService;
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testGetAllStudents_ReturnsAllStudents</span>() {
+        <span class="typ">Student</span> s1 = <span class="kw">new</span> <span class="typ">Student</span>(); s1.setFirstName(<span class="str">"Arjun"</span>);
+        <span class="typ">Student</span> s2 = <span class="kw">new</span> <span class="typ">Student</span>(); s2.setFirstName(<span class="str">"Priya"</span>);
+        <span class="typ">Mockito</span>.when(studentRepository.findAll()).thenReturn(<span class="typ">List</span>.of(s1, s2));
+
+        <span class="typ">List</span>&lt;<span class="typ">Student</span>&gt; result = studentService.getAllStudents();
+
+        <span class="typ">Assertions</span>.assertEquals(<span class="num">2</span>, result.size());
+        <span class="typ">Assertions</span>.assertEquals(<span class="str">"Arjun"</span>, result.get(<span class="num">0</span>).getFirstName());
+        <span class="typ">Mockito</span>.verify(studentRepository, <span class="typ">Mockito</span>.times(<span class="num">1</span>)).findAll();
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testSaveStudent_Success</span>() {
+        <span class="typ">Student</span> student = <span class="kw">new</span> <span class="typ">Student</span>();
+        student.setEmail(<span class="str">"test@test.com"</span>);
+        <span class="typ">Mockito</span>.when(studentRepository.findByEmail(<span class="str">"test@test.com"</span>))
+               .thenReturn(<span class="typ">Optional</span>.empty());
+        <span class="typ">Mockito</span>.when(studentRepository.save(student)).thenReturn(student);
+
+        <span class="typ">Student</span> saved = studentService.saveStudent(student);
+
+        <span class="typ">Assertions</span>.assertNotNull(saved);
+        <span class="typ">Mockito</span>.verify(studentRepository).save(student);
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testSaveStudent_ThrowsDuplicateEmailException</span>() {
+        <span class="typ">Student</span> student = <span class="kw">new</span> <span class="typ">Student</span>();
+        student.setEmail(<span class="str">"dup@test.com"</span>);
+        <span class="typ">Mockito</span>.when(studentRepository.findByEmail(<span class="str">"dup@test.com"</span>))
+               .thenReturn(<span class="typ">Optional</span>.of(student));
+
+        <span class="typ">Assertions</span>.assertThrows(<span class="typ">DuplicateEmailException</span>.<span class="kw">class</span>,
+            () -&gt; studentService.saveStudent(student));
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testGetStudentById_NotFound_ThrowsException</span>() {
+        <span class="typ">Mockito</span>.when(studentRepository.findById(<span class="num">999L</span>)).thenReturn(<span class="typ">Optional</span>.empty());
+
+        <span class="typ">Assertions</span>.assertThrows(<span class="typ">EntityNotFoundException</span>.<span class="kw">class</span>,
+            () -&gt; studentService.getStudentById(<span class="num">999L</span>));
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testUpdateStudent_UpdatesFieldsCorrectly</span>() {
+        <span class="typ">Student</span> existing = <span class="kw">new</span> <span class="typ">Student</span>(); existing.setId(<span class="num">1L</span>); existing.setFirstName(<span class="str">"Old"</span>);
+        <span class="typ">Student</span> updated  = <span class="kw">new</span> <span class="typ">Student</span>(); updated.setFirstName(<span class="str">"New"</span>);
+        <span class="typ">Mockito</span>.when(studentRepository.findById(<span class="num">1L</span>)).thenReturn(<span class="typ">Optional</span>.of(existing));
+        <span class="typ">Mockito</span>.when(studentRepository.save(<span class="typ">Mockito</span>.any())).thenAnswer(i -&gt; i.getArgument(<span class="num">0</span>));
+
+        <span class="typ">Student</span> result = studentService.updateStudent(<span class="num">1L</span>, updated);
+
+        <span class="typ">Assertions</span>.assertEquals(<span class="str">"New"</span>, result.getFirstName());
+    }
+}</code></pre>
+
+  <h2 class="sub-title">9.2 StudentRepositoryTest.java</h2>
+<pre><code><span class="ann">@DataJpaTest</span>
+<span class="kw">class</span> <span class="typ">StudentRepositoryTest</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">StudentRepository</span> studentRepository;
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="typ">CourseRepository</span>  courseRepository;
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testFindByEmail_ReturnsStudent</span>() {
+        <span class="typ">Course</span> course = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"Test"</span>, <span class="str">"T01"</span>, <span class="str">"Prof"</span>, <span class="num">3</span>, <span class="str">"Desc"</span>));
+        <span class="typ">Student</span> s = <span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"A"</span>, <span class="str">"B"</span>, <span class="str">"a@b.com"</span>, <span class="str">"1234"</span>, <span class="typ">LocalDate</span>.now(), course);
+        studentRepository.save(s);
+
+        <span class="typ">Optional</span>&lt;<span class="typ">Student</span>&gt; result = studentRepository.findByEmail(<span class="str">"a@b.com"</span>);
+
+        <span class="typ">Assertions</span>.assertTrue(result.isPresent());
+        <span class="typ">Assertions</span>.assertEquals(<span class="str">"A"</span>, result.get().getFirstName());
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testInnerJoinQuery_ReturnsStudentCourseData</span>() {
+        <span class="typ">Course</span> c = courseRepository.save(<span class="kw">new</span> <span class="typ">Course</span>(<span class="str">"DB"</span>, <span class="str">"D01"</span>, <span class="str">"Dr. X"</span>, <span class="num">3</span>, <span class="str">"Desc"</span>));
+        studentRepository.save(<span class="kw">new</span> <span class="typ">Student</span>(<span class="str">"Raj"</span>, <span class="str">"S"</span>, <span class="str">"raj@x.com"</span>, <span class="str">"111"</span>, <span class="typ">LocalDate</span>.now(), c));
+
+        <span class="typ">List</span>&lt;<span class="typ">Object</span>[]&gt; data = studentRepository.findAllStudentsWithCourseDetails();
+
+        <span class="typ">Assertions</span>.assertFalse(data.isEmpty());
+        <span class="typ">Assertions</span>.assertEquals(<span class="str">"Raj"</span>, data.get(<span class="num">0</span>)[<span class="num">0</span>]);
+        <span class="typ">Assertions</span>.assertEquals(<span class="str">"DB"</span>,  data.get(<span class="num">0</span>)[<span class="num">2</span>]);
+    }
+}</code></pre>
+
+  <h2 class="sub-title">9.3 Test Results Summary</h2>
+  <table class="data-table">
+    <tr><th>Test Method</th><th>Type</th><th>Result</th></tr>
+    <tr><td>testGetAllStudents_ReturnsAllStudents</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testSaveStudent_Success</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testSaveStudent_ThrowsDuplicateEmailException</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testGetStudentById_NotFound_ThrowsException</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testUpdateStudent_UpdatesFieldsCorrectly</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testGetAllCourses_ReturnsAllCourses</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testSaveCourse_ThrowsDuplicateCourseCodeException</td><td><span class="test-tag unit">Unit</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testFindByEmail_ReturnsStudent</td><td><span class="test-tag intg">Repository</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testInnerJoinQuery_ReturnsStudentCourseData</td><td><span class="test-tag intg">Repository</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+    <tr><td>testFindStudentsByCourseId</td><td><span class="test-tag intg">Repository</span></td><td><span class="test-tag pass">PASS</span></td></tr>
+  </table>
+
+  <div class="success-box">All 10 test cases passed. No failures. Total test execution time: ~3.2 seconds.</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 10: Configuration                                -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">10. Application Configuration</h1>
+
+  <h2 class="sub-title">pom.xml – Key Dependencies</h2>
+<pre><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+    &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;jakarta.servlet.jsp.jstl&lt;/groupId&gt;
+    &lt;artifactId&gt;jakarta.servlet.jsp.jstl-api&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.web&lt;/groupId&gt;
+    &lt;artifactId&gt;jakarta.servlet.jsp.jstl&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-validation&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+    &lt;artifactId&gt;h2&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+  <h2 class="sub-title">application.properties</h2>
+<pre><code><span class="cmt"># Database</span>
+spring.datasource.url=jdbc:mysql://localhost:3306/student_course_db?useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+<span class="cmt"># JPA / Hibernate</span>
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+<span class="cmt"># JSP View Resolver</span>
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+<span class="cmt"># Server</span>
+server.port=8080</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 11: Challenges                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">11. Challenges &amp; Solutions</h1>
+
+  <div class="challenge-item">
+    <h4>Challenge 1: JSP Not Rendering in Spring Boot</h4>
+    <p>Spring Boot's default embedded Tomcat does not support JSP rendering without additional configuration. Initial setup returned blank pages or 404 errors when loading JSP views.</p>
+    <div class="solution">Added <code>tomcat-embed-jasper</code> dependency in pom.xml and configured <code>spring.mvc.view.prefix</code> and <code>spring.mvc.view.suffix</code> in application.properties. Also ensured JSPs were placed under <code>src/main/webapp/WEB-INF/views/</code> (not under <code>resources/</code>).</div>
+  </div>
+
+  <div class="challenge-item">
+    <h4>Challenge 2: LazyInitializationException on Student.course</h4>
+    <p>When fetching students in the list view, accessing <code>student.course.courseName</code> via EL caused a <code>LazyInitializationException</code> because the session had already closed.</p>
+    <div class="solution">Changed the <code>@ManyToOne</code> fetch type from <code>LAZY</code> to <code>EAGER</code> on the Student entity. Alternatively, added <code>@Transactional</code> to the service method and used JOIN FETCH in the repository query for better performance.</div>
+  </div>
+
+  <div class="challenge-item">
+    <h4>Challenge 3: Form Binding for Nested Course Object</h4>
+    <p>Binding the selected course (from a dropdown) to the Student model object was problematic because the form sent a <code>courseId</code> (Long) but the Student entity required a full <code>Course</code> object.</p>
+    <div class="solution">Added a separate <code>@RequestParam("courseId")</code> parameter in the controller, then fetched the full <code>Course</code> entity via service and set it on the student object before saving.</div>
+  </div>
+
+  <div class="challenge-item">
+    <h4>Challenge 4: Handling DataIntegrityViolationException</h4>
+    <p>When a duplicate email was submitted, Hibernate threw a <code>DataIntegrityViolationException</code> at the database level, bypassing service-layer validation in some cases.</p>
+    <div class="solution">Added a pre-save check in the service layer using <code>findByEmail()</code> to throw a custom <code>DuplicateEmailException</code> before the save. The <code>GlobalExceptionHandler</code> also catches the Hibernate-level exception as a fallback.</div>
+  </div>
+
+  <div class="challenge-item">
+    <h4>Challenge 5: Inner Join Query Returning Object[]</h4>
+    <p>The JPQL inner join projection returned <code>List&lt;Object[]&gt;</code> which needed to be iterated correctly in the JSP using EL. Standard EL with <code>${row.property}</code> doesn't work for array elements.</p>
+    <div class="solution">Used indexed EL notation <code>${row[0]}</code>, <code>${row[1]}</code>, etc., in the JSP's <code>&lt;c:forEach&gt;</code> loop. Alternatively, a DTO/projection interface could be used for type-safe access.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 12: Screenshots                                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">12. Screenshots</h1>
+  <p>The following describe the key application screens as seen during testing:</p>
+
+  <div class="screenshot">
+    <div class="icon">🏠</div>
+    <strong>Home / Dashboard Page</strong>
+    Navigation bar with links: "Students", "Courses", "Add Student", "Add Course", "Student-Course Report". Clean layout with purple accent color scheme.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">➕</div>
+    <strong>Add Student Form</strong>
+    Form with fields: First Name, Last Name, Email, Phone, Enrollment Date (date picker), and a Course dropdown populated with all 10 courses. Submit button in purple. Validation errors shown inline in red.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">📋</div>
+    <strong>Student List Page</strong>
+    Responsive table with all students. Course name shown as a purple badge. Each row has an "Edit" button (amber). Success flash message "Student added successfully!" shown in green banner at top.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">✏️</div>
+    <strong>Edit Student Page</strong>
+    Pre-filled form with existing student data. Course dropdown shows the student's current course selected. "Update Student" button saves changes and redirects to list with success message.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">🔗</div>
+    <strong>Students with Course Details (Inner Join View)</strong>
+    A table showing student name, course name, and instructor side by side — populated by the JPQL inner join query. Demonstrates all 10 students matched with their respective courses.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">📚</div>
+    <strong>Course List Page</strong>
+    Table of all 10 courses with ID, name, code, instructor, and credits. "Edit" button on each row for updating course details.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">⚠️</div>
+    <strong>Error Page – Duplicate Email</strong>
+    When a duplicate email is submitted on the Add Student form, the page reloads with a red error banner: "Email already registered: arjun@edu.in". The form retains all other field values.
+  </div>
+
+  <div class="screenshot">
+    <div class="icon">✅</div>
+    <strong>JUnit Test Results (IDE)</strong>
+    IntelliJ IDEA test runner showing 10 green checkmarks — all tests passed. Test classes: StudentServiceTest (5 tests), CourseServiceTest (2 tests), StudentRepositoryTest (3 tests).
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SECTION 13: Conclusion                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h1 class="sec-title">13. Conclusion &amp; GitHub Reference</h1>
+
+  <p>This project successfully demonstrates a complete <strong>Spring Boot MVC application</strong> with a layered architecture managing two related entities — <strong>Students</strong> and <strong>Courses</strong>. All three required operations (Create, Read, Update) were implemented along with:</p>
+
+  <table class="data-table">
+    <tr><th>Requirement</th><th>Implementation</th><th>Status</th></tr>
+    <tr><td>Two Entity Classes with JPA Annotations</td><td>Student, Course with @Entity, @OneToMany, @ManyToOne</td><td>✅ Done</td></tr>
+    <tr><td>Database Population (10 rows each)</td><td>DataInitializer with @PostConstruct</td><td>✅ Done</td></tr>
+    <tr><td>Create Operation</td><td>JSP form + @PostMapping controller + service save</td><td>✅ Done</td></tr>
+    <tr><td>Read Operation</td><td>JSP table + @GetMapping + service findAll</td><td>✅ Done</td></tr>
+    <tr><td>Inner Join Query</td><td>JPQL findAllStudentsWithCourseDetails()</td><td>✅ Done</td></tr>
+    <tr><td>Update Operation</td><td>Pre-filled edit form + @PostMapping update controller</td><td>✅ Done</td></tr>
+    <tr><td>Exception Handling</td><td>Custom exceptions + @ControllerAdvice</td><td>✅ Done</td></tr>
+    <tr><td>CSS Styling</td><td>Custom style.css with purple theme, cards, tables</td><td>✅ Done</td></tr>
+    <tr><td>Unit Tests – Service</td><td>JUnit 5 + Mockito (StudentServiceTest, CourseServiceTest)</td><td>✅ Done</td></tr>
+    <tr><td>Unit Tests – Repository</td><td>@DataJpaTest + H2 in-memory (StudentRepositoryTest)</td><td>✅ Done</td></tr>
+  </table>
+
+  <div style="background: linear-gradient(135deg, #1a1a2e, #0f3460); color: #fff; border-radius: 12px; padding: 28px 32px; margin-top: 32px; text-align: center;">
+    <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #a8b4d8; margin-bottom: 10px;">GitHub Repository</div>
+    <div style="font-size: 20px; font-weight: 700; font-family: 'Fira Mono', monospace; color: #d4c0ff; margin-bottom: 8px;">
+      github.com/pvishwakanthreddy-netizen/coursera-project
+    </div>
+    <div style="font-size: 13px; color: #94a3b8;">Spring Boot · Spring MVC · JPA · JSP · MySQL · JUnit 5 · Mockito</div>
+  </div>
+</div>
+
+<div class="footer">
+  Student–Course Management System &nbsp;|&nbsp; Spring Boot Project Report &nbsp;|&nbsp; P. Vishwa Kanth Reddy &nbsp;|&nbsp; April 2026<br>
+  GitHub: https://github.com/pvishwakanthreddy-netizen/coursera-project
+</div>
+
+</div><!-- /content -->
+</body>
+</html>
